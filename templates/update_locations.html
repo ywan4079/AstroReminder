@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Locations - AstroReminder{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Update Your Locations</h1>
+    <nav>
+        <ul>
+            <li><a href="{{url_for('home', id=id)}}">Home</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="update-form">
+    <h2>Update Your Locations</h2>
+    <form action="{{url_for('update_locations', id=id)}}" method="POST">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" autocomplete="off">
+        <div id="autocomplete-list" class="autocomplete-items"></div>
+
+        <label for="location">Selected Location:</label>
+        <div id="selected-locations" class="selected-locations"></div>
+        
+        <!-- Hidden input to submit selected locations -->
+        <input type="hidden" id="selected-locations-data" name="selected_locations">
+        
+        <button type="submit">Save</button>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const locations = {{ locations|tojson|safe }};
+    const selectedLocationsFromDB = {{ selected_locations|tojson|safe }};
+    const input = document.getElementById('location');
+    const autocompleteList = document.getElementById('autocomplete-list');
+    const selectedLocationsDiv = document.getElementById('selected-locations');
+    const selectedLocationsInput = document.getElementById('selected-locations-data');
+    const selectedLocations = new Set(selectedLocationsFromDB);
+
+    function updateSelectedLocations() {
+        selectedLocationsDiv.innerHTML = '';
+        selectedLocations.forEach(location => {
+            const item = document.createElement('div');
+            item.textContent = location;
+            item.classList.add('selected-item');
+            
+            const removeBtn = document.createElement('span');
+            removeBtn.textContent = '×';
+            removeBtn.addEventListener('click', function() {
+                selectedLocations.delete(location);
+                updateSelectedLocations();
+            });
+            
+            item.appendChild(removeBtn);
+            selectedLocationsDiv.appendChild(item);
+        });
+        
+        // Update hidden input with comma-separated list of selected locations
+        selectedLocationsInput.value = Array.from(selectedLocations).join(',');
+    }
+
+    input.addEventListener('input', function() {
+        const value = this.value.toLowerCase();
+        autocompleteList.innerHTML = '';
+
+        if (!value) return;
+
+        const filteredLocations = locations.filter(location => location.toLowerCase().includes(value));
+        const limitedLocations = filteredLocations.slice(0, 5);
+
+        limitedLocations.forEach(location => {
+            const item = document.createElement('div');
+            item.textContent = location;
+            item.classList.add('autocomplete-item');
+            item.addEventListener('click', function() {
+                if (!selectedLocations.has(location)) {
+                    selectedLocations.add(location);
+                    updateSelectedLocations();
+                }
+                input.value = '';
+                autocompleteList.innerHTML = '';
+            });
+            autocompleteList.appendChild(item);
+        });
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const firstItem = autocompleteList.querySelector('.autocomplete-item');
+            if (firstItem) {
+                firstItem.click();
+            }
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target !== input) {
+            autocompleteList.innerHTML = '';
+        }
+    });
+
+    // Initialize selected locations from the database
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSelectedLocations();
+    });
+</script>
+{% endblock %}

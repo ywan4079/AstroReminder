@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}AstroReminder - Home{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>User Feedback</h1>
+        <nav>
+            <a href="/">Go Back</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <p>
+                Please Write down your user feedback here. It will help me to improve the website for better user experience.
+            </p>
+        </section>
+        <form action="/feedback_visitor" method="post">
+            <textarea id="feedback" name="feedback" placeholder="Type feedback here..." rows="10" style="width: 90%;" required></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </main>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}AstroReminder - Announcement{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Scheduled Shutdowm</h1>
+        <nav>
+            <a href="{{url_for('admin', id=id)}}">Go back</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <p>
+                Select a date and time to shutdown the website.
+            </p>
+        </section>
+        Next shutdown datetime: {{shutdown_datetime}}
+        Now: {{now}}
+        <form action="{{url_for('shutdown',id=id)}}" method="post">
+            <input type="datetime-local" id="datetime" name="datetime" required>
+            <!-- <textarea id="content" name="content" placeholder="Type accouncement here..." rows="10" style="width: 90%;" required></textarea> -->
+            <button type="submit">Schedule</button>
+        </form>
+    </main>
+{% endblock %}

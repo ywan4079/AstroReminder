@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    <h2>Sign Up</h2>
+    <form action="/signup" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="text">Username:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="password">Confirm Password:</label>
+        <input type="password" id="password2" name="password2" required>
+
+        <label for="date">Birthday:</label>
+        <input type="date" id="birthday" name="birthday" required>
+        <br>
+        
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" autocomplete="off">
+        <div id="autocomplete-list" class="autocomplete-items"></div>
+
+        <label for="location">Selected Location:</label>
+        <div id="selected-locations" class="selected-locations"></div>
+        
+        <!-- Hidden input to submit selected locations -->
+        <input type="hidden" id="selected-locations-data" name="selected_locations">
+        
+        <button type="submit">Sign Up</button>
+    </form>
+    <a href="/login">Already have an account?</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const locations = {{ locations|tojson|safe }};
+        const input = document.getElementById('location');
+        const autocompleteList = document.getElementById('autocomplete-list');
+        const selectedLocationsDiv = document.getElementById('selected-locations');
+        const selectedLocationsInput = document.getElementById('selected-locations-data');
+        const selectedLocations = new Set();
+
+        function updateSelectedLocations() {
+            selectedLocationsDiv.innerHTML = '';
+            selectedLocations.forEach(location => {
+                const item = document.createElement('div');
+                item.textContent = location;
+                item.classList.add('selected-item');
+                
+                const removeBtn = document.createElement('span');
+                removeBtn.textContent = '×';
+                removeBtn.addEventListener('click', function() {
+                    selectedLocations.delete(location);
+                    updateSelectedLocations();
+                });
+                
+                item.appendChild(removeBtn);
+                selectedLocationsDiv.appendChild(item);
+            });
+            
+            // Update hidden input with comma-separated list of selected locations
+            selectedLocationsInput.value = Array.from(selectedLocations).join(',');
+        }
+
+        input.addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            autocompleteList.innerHTML = '';
+
+            if (!value) return;
+
+            const filteredLocations = locations.filter(location => location.toLowerCase().includes(value));
+            const limitedLocations = filteredLocations.slice(0, 5);
+
+            limitedLocations.forEach(location => {
+                const item = document.createElement('div');
+                item.textContent = location;
+                item.classList.add('autocomplete-item');
+                item.addEventListener('click', function() {
+                    if (!selectedLocations.has(location)) {
+                        selectedLocations.add(location);
+                        updateSelectedLocations();
+                    }
+                    input.value = '';
+                    autocompleteList.innerHTML = '';
+                });
+                autocompleteList.appendChild(item);
+            });
+        });
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const firstItem = autocompleteList.querySelector('.autocomplete-item');
+                if (firstItem) {
+                    firstItem.click();
+                }
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target !== input) {
+                autocompleteList.innerHTML = '';
+            }
+        });
+    </script>
+{% endblock %}

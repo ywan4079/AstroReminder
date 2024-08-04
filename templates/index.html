@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}AstroReminder - Home{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Welcome to AstroReminder</h1>
+        <nav>
+            <a href="/signup">Sign Up</a>
+            <a href="/login">Log In</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>About AstroReminder</h2>
+            <p>
+                AstroReminder is your personal astronomy assistant. We help you keep track of the weather conditions to ensure you have the best stargazing experience. Sign up to receive email every 12pm if the weather condition tonight is good at your locations so you can plan your night out under the stars!
+            </p>
+        </section>
+        <section>
+            <h2>Features</h2>
+            <ul>
+                <li>Daily weather updates for optimal stargazing conditions</li>
+                <li>Personalized notifications based on your locations</li>
+                <li>Easy sign-up and log-in process</li>
+            </ul>
+        </section>
+        <section>
+            <h2>How It Works</h2>
+            <p>
+                Simply sign up with your email, password, and locations. Our system will send you an email every day at 12pm if the weather forecast of the night shows that it's suitable for star gazing.<br>
+                If the sky is clear, you'll be the first to know!
+            </p>
+        </section>
+        <a href="/feedback_visitor">Contact us</a>
+    </main>
+{% endblock %}

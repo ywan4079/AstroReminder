@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - AstroReminder{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Admin settings</h1>
+        <nav>
+            <ul>
+                <li><a href="{{url_for('home', id=id)}}">Home</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <a href="{{url_for('announcement', id=id)}}">Announcement</a>
+    <a href="{{url_for('shutdown', id=id)}}">Scheduled Shutdown</a>
+    <!-- Functions: send email to all users, freeze the server. -->
+    <main>
+        <section>
+
+            <h3>User Management</h3>
+            Total number of users: {{number_users}}<br>
+            <!-- <a href="{{url_for('home', id=id)}}">Accouncement</a>
+            <a href="{{url_for('home', id=id)}}">Scheduled Shutdown</a> -->
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Character</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Placeholder data, replace with actual data -->
+                        {% for user in users %}
+                            <tr>
+                                <td>{{user[0]}}</td>
+                                <td>{{user[1]}}</td>
+                                <td>{{user[6]}}</td>
+                                <td>{{user[4]}}</td>
+                                <td>
+                                    <div class="button-group">
+                                        <form action="{{url_for('delete_user', delete_id=user[0], admin_id=id)}}" class="inline-form" method="post">
+                                            {% if user[4] == 'admin' %}
+                                                <button class="btn-action" type="submit">Remove admin</button>
+                                            {% else %}
+                                                <button class="btn-action" type="submit">Delete</button>
+                                            {% endif %}
+                                        </form>
+
+                                        <form action="{{url_for('add_admin', new_admin_id=user[0], admin_id=id)}}" class="inline-form" method="post">
+                                            {% if user[4] != 'admin' %}
+                                                <button class="btn-action" type="submit">Make Admin</button>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+{% endblock %}

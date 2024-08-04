@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Name - AstroReminder{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Update Your Name</h1>
+        <nav>
+            <ul>
+                <li><a href="{{url_for('home', id=id)}}">Home</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="update-form">
+        <form action="{{url_for('update_name', id=id)}}" method="POST">
+            <label for="text">New Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <button type="submit">Save</button>
+        </form>
+    </section>
+{% endblock %}

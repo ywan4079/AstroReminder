@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Birthday - AstroReminder{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Update Your Birthday</h1>
+        <nav>
+            <ul>
+                <li><a href="{{url_for('home', id=id)}}">Home</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="update-form">
+        <form action="{{url_for('update_birthday', id=id)}}" method="POST">
+            <label for="email">New Birthday:</label>
+            <input type="date" id="birthday" name="birthday" required>
+            
+            <button type="submit">Save</button>
+        </form>
+    </section>
+{% endblock %}

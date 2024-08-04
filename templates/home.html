@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - AstroReminder{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>User Information</h1>
+        <nav>
+            <ul>
+                {% if character == 'admin' %}
+                    <li><a href="{{url_for('admin',id=id)}}">Admin</a></li>
+                {% endif %}
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+
+        <form action="{{url_for('update_email', id=id)}}" method="GET">
+            <div class="form-group">
+                <label for="email">Email: {{email}}</label>
+                <button type="submit" class="update-button" style="padding: 5px 10px;">Edit</button>
+            </div>
+        </form>
+
+        <form action="{{url_for('update_name', id=id)}}" method="GET">
+            <div class="form-group">
+                <label for="text">Name: {{name}}</label>
+                <button type="submit" class="update-button" style="padding: 5px 10px;">Edit</button>
+            </div>
+        </form>
+
+        <form action="{{url_for('update_password', id=id)}}" method="GET">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <button type="submit" class="update-button" style="padding: 5px 10px;">Edit</button>
+            </div>
+        </form>
+
+        <form action="{{url_for('update_birthday', id=id)}}" method="GET">
+            <div class="form-group">
+                <label for="birthday">Birthday: {{birthday}} </label>
+                <button type="submit" class="update-button" style="padding: 5px 10px;">Edit</button>
+            </div>
+        </form>
+
+        <form action="{{url_for('update_locations', id=id)}}" method="GET">
+            <div class="form-group">
+                <label for="location">Selected Locations</label>
+                <button type="submit" class="update-button" style="padding: 5px 10px;">Edit</button>
+            </div>
+            <div id="selected-locations" class="selected-locations">
+                {% for location in selected_locations %}
+                    <div class="selected-item">{{location}}</div>
+                {% endfor %}
+            </div>
+        </form>
+        <a href="{{url_for('feedback_user', id=id)}}">Contact us</a>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <!-- <script>
+        const locations = {{ locations|tojson|safe }};
+        const selectedLocationsFromDB = {{ selected_locations|tojson|safe }};
+        const input = document.getElementById('location');
+        const autocompleteList = document.getElementById('autocomplete-list');
+        const selectedLocationsDiv = document.getElementById('selected-locations');
+        const selectedLocationsInput = document.getElementById('selected-locations-data');
+        const selectedLocations = new Set(selectedLocationsFromDB);
+
+        function updateSelectedLocations() {
+            selectedLocationsDiv.innerHTML = '';
+            selectedLocations.forEach(location => {
+                const item = document.createElement('div');
+                item.textContent = location;
+                item.classList.add('selected-item');
+                
+                const removeBtn = document.createElement('span');
+                removeBtn.textContent = '×';
+                removeBtn.addEventListener('click', function() {
+                    selectedLocations.delete(location);
+                    updateSelectedLocations();
+                });
+                
+                item.appendChild(removeBtn);
+                selectedLocationsDiv.appendChild(item);
+            });
+            
+            // Update hidden input with comma-separated list of selected locations
+            selectedLocationsInput.value = Array.from(selectedLocations).join(',');
+        }
+
+        input.addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            autocompleteList.innerHTML = '';
+
+            if (!value) return;
+
+            const filteredLocations = locations.filter(location => location.toLowerCase().includes(value));
+            const limitedLocations = filteredLocations.slice(0, 5);
+
+            limitedLocations.forEach(location => {
+                const item = document.createElement('div');
+                item.textContent = location;
+                item.classList.add('autocomplete-item');
+                item.addEventListener('click', function() {
+                    if (!selectedLocations.has(location)) {
+                        selectedLocations.add(location);
+                        updateSelectedLocations();
+                    }
+                    input.value = '';
+                    autocompleteList.innerHTML = '';
+                });
+                autocompleteList.appendChild(item);
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target !== input) {
+                autocompleteList.innerHTML = '';
+            }
+        });
+
+        // Initialize selected locations from the database
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSelectedLocations();
+        });
+    </script> -->
+{% endblock %}

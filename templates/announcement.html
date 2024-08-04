@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}AstroReminder - Announcement{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Announcement</h1>
+        <nav>
+            <a href="{{url_for('admin', id=id)}}">Go back</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <p>
+                Write down announcement here. It might take a while. Don't click it again.
+            </p>
+        </section>
+        <form action="{{url_for('announcement',id=id)}}" method="post">
+            <textarea id="content" name="content" placeholder="Type accouncement here..." rows="10" style="width: 90%;" required></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </main>
+{% endblock %}

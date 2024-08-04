@@ -1,0 +1,229 @@
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background: url('../images/background.jpg') no-repeat center center fixed; 
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* slight transparency */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 10px;
+}
+
+nav ul li a, nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007BFF;
+}
+
+nav ul li a:hover, nav a:hover {
+    text-decoration: underline;
+}
+
+main section {
+    margin: 20px 0;
+}
+
+main h2 {
+    margin-bottom: 10px;
+}
+
+main p, main ul {
+    text-align: left;
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: #555;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+input[type="email"], input[type="password"], input[type="text"], input[type="search"] {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="submit"], button[type="button"] {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover, button[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+.message {
+    margin: 15px 0;
+    color: #d9534f;
+}
+
+.flash-messages {
+    position: fixed; /* Fixes the position to the top of the viewport */
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0; /* Remove any default margin */
+    padding: 10px; /* Add some padding for spacing */
+    z-index: 1000; /* Ensure flash messages appear above other content */
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Stack flash messages vertically */
+    align-items: center; /* Center messages horizontally */
+}
+
+.flash-message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%; /* Make flash message container full width */
+    max-width: 600px; /* Set a max width for better readability */
+    text-align: center; /* Center text within flash message */
+    display: flex; /* Enable flexbox */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+}
+
+.flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.autocomplete-items {
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+}
+.autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+}
+.autocomplete-item:hover {
+    background-color: #ddd;
+}
+
+.selected-locations {
+    margin-top: 10px;
+}
+.selected-item {
+    display: inline-block;
+    padding: 5px;
+    margin: 2px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #8f8f8f;
+    cursor: pointer;
+}
+.selected-item span {
+    margin-left: 5px;
+}
+
+.table-container {
+    max-height: 400px; /* Adjust as needed */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin-table th, .admin-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.admin-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-table tr:hover {
+    background-color: #ddd;
+}
+
+.button-group {
+    display: flex;
+}
+
+.inline-form {
+    margin: 0 5px;
+}
+
+.btn-action {
+    /* padding: 5px 10px; */
+    margin-right: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.btn-action:hover {
+    background-color: #0056b3;
+}
