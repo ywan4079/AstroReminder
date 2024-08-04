@@ -655,7 +655,7 @@ def announcement(id):
 
 @app.route('/shutdown/<int:id>', methods=['GET', 'POST'])
 @login_required
-def shutdown(id):
+def shutdown(id): 
     global shutdown_time
     if request.method == 'POST':
         shutdown_datetime_str = request.form.get('datetime')
