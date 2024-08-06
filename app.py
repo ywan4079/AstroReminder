@@ -266,7 +266,7 @@ def shutdown_server():
     os.kill(os.getpid(), signal.SIGINT)
 
 # Schedule the send_email function to run every day at 12 PM
-schedule.every().day.at("07:15").do(send_email)
+schedule.every().day.at("07:22").do(send_email)
 
 # Scheduler function to run in a separate thread
 def run_scheduler():
