@@ -698,4 +698,7 @@ if __name__ == '__main__':
     shutdown_thread.daemon = True
     shutdown_thread.start()
 
+    now = datetime.datetime.now(australia_tz)
+    print(f"CHECKING TIME: {now.hour}:{now.minute}", flush=True)
+
     app.run(debug=True)
