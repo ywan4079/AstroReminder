@@ -156,7 +156,8 @@ def weather_condition_decider(row):
 
 def check_and_send_email():
     now = datetime.datetime.now(australia_tz)
-    if now.hour == 7 and now.minute == 50:
+    print(f"CHECKING TIME: {now.hour}:{now.minute}")
+    if now.hour == 12 and now.minute == 0:
         send_email()
 
 def send_email():
@@ -677,9 +678,8 @@ def shutdown(id):
             return redirect(url_for('admin', id=id))
 
     if shutdown_time == None:
-        return render_template('shutdown.html', id=id, shutdown_datetime="----", now=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    # return render_template('shutdown.html', id=id, shutdown_datetime=shutdown_time.strftime('%Y-%m-%d %H:%M:%S'), now=datetime.datetime.now(australia_tz).strftime('%Y-%m-%d %H:%M:%S'))
-    return render_template('shutdown.html', id=id, shutdown_datetime=shutdown_time.strftime('%Y-%m-%d %H:%M:%S'), now=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        return render_template('shutdown.html', id=id, shutdown_datetime="----", now=datetime.datetime.now(australia_tz).strftime('%Y-%m-%d %H:%M:%S'))
+    return render_template('shutdown.html', id=id, shutdown_datetime=shutdown_time.strftime('%Y-%m-%d %H:%M:%S'), now=datetime.datetime.now(australia_tz).strftime('%Y-%m-%d %H:%M:%S'))
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
