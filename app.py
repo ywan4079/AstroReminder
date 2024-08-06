@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
 
 # ensure schedule can be loaded
-import sys
+# import sys
 # sys.path.append('./.local/lib/python3.10/site-packages')
 
 import csv, sqlite3, hashlib, smtplib, schedule, time, threading, requests, datetime, os, signal, pytz
@@ -266,7 +266,7 @@ def shutdown_server():
     os.kill(os.getpid(), signal.SIGINT)
 
 # Schedule the send_email function to run every day at 12 PM
-schedule.every().day.at("12:00").do(send_email)
+schedule.every().day.at("7:06").do(send_email)
 
 # Scheduler function to run in a separate thread
 def run_scheduler():
