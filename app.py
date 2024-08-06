@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 # import sys
 # sys.path.append('./.local/lib/python3.10/site-packages')
 
-import csv, sqlite3, hashlib, smtplib, schedule, time, threading, requests, datetime, os, signal, pytz
+import csv, sqlite3, hashlib, smtplib, schedule, time, threading, requests, datetime, os, signal, pytz, logging
 
 FROM_EMAIL = 'astroreminderassistant@gmail.com'
 EMAIL_PASSWORD = 'bumq fcfv zftb vazz'
@@ -28,6 +28,8 @@ app.secret_key = 'apple35952833'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+logging.basicConfig(level=logging.INFO)
 
 # Read city database
 cities = dict()
@@ -276,9 +278,15 @@ schedule.every().minute.do(check_and_send_email)
 
 # Scheduler function to run in a separate thread
 def run_scheduler():
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)  # Sleep for 1 second
     while True:
-        schedule.run_pending()
-        time.sleep(1)  # Sleep for 1 second
+        try:
+            schedule.run_pending()
+            time.sleep(1)  # Sleep for 1 second
+        except Exception as e:
+            logging.error(f"Scheduler encountered an error: {e}")
 
 def scheduled_shutdown():
     global shutdown_time
@@ -697,8 +705,5 @@ if __name__ == '__main__':
     shutdown_thread = threading.Thread(target=scheduled_shutdown)
     shutdown_thread.daemon = True
     shutdown_thread.start()
-
-    now = datetime.datetime.now(australia_tz)
-    print(f"CHECKING TIME: {now.hour}:{now.minute}", flush=True)
 
     app.run(debug=True)
