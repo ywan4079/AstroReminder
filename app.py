@@ -670,9 +670,11 @@ def shutdown(id):
         else:
             flash('Successfully schedule a shutdown date time.', 'success')
             return redirect(url_for('admin', id=id))
+
     if shutdown_time == None:
-        return render_template('shutdown.html', id=id, shutdown_datetime="----")
-    return render_template('shutdown.html', id=id, shutdown_datetime=shutdown_time.strftime('%Y-%m-%d %H:%M:%S'), now=datetime.datetime.now(australia_tz).strftime('%Y-%m-%d %H:%M:%S'))
+        return render_template('shutdown.html', id=id, shutdown_datetime="----", now=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    # return render_template('shutdown.html', id=id, shutdown_datetime=shutdown_time.strftime('%Y-%m-%d %H:%M:%S'), now=datetime.datetime.now(australia_tz).strftime('%Y-%m-%d %H:%M:%S'))
+    return render_template('shutdown.html', id=id, shutdown_datetime=shutdown_time.strftime('%Y-%m-%d %H:%M:%S'), now=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -691,7 +693,4 @@ if __name__ == '__main__':
     shutdown_thread.daemon = True
     shutdown_thread.start()
 
-    print(datetime.datetime.now())
-    print("-------")
-    
     app.run(debug=True)
