@@ -705,5 +705,6 @@ if __name__ == '__main__':
     shutdown_thread = threading.Thread(target=scheduled_shutdown)
     shutdown_thread.daemon = True
     shutdown_thread.start()
+    logging.error("testing")
 
     app.run(debug=True)
