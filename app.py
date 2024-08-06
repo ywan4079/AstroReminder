@@ -14,6 +14,7 @@ FROM_EMAIL = 'astroreminderassistant@gmail.com'
 EMAIL_PASSWORD = 'bumq fcfv zftb vazz'
 
 CLOUD_THRESHOLD = 10
+MOON_THRESHOLD = 10
 CLEAR_SKY_COUNT = 4
 base_dir = os.path.dirname(os.path.abspath(__file__))
 australia_tz = pytz.timezone('Australia/Sydney')
@@ -97,8 +98,8 @@ def weather_condition_decider(row):
         moonphase = int(sun_moon_info[9][:-1])
 
         # #Consider if tonight is clear enough to see star
-        if moonphase > 10:
-            continue
+        # if moonphase > 10:
+        #     continue
 
         # grab the moonrise in the next day
         if moonrise == '----':
@@ -142,7 +143,8 @@ def weather_condition_decider(row):
                 row['mid_clouds'] <= CLOUD_THRESHOLD and
                 row['high_clouds'] <= CLOUD_THRESHOLD and
                 (row['time'] >= moonset_hour or
-                row['time'] <= moonrise_hour)): ##also after moonset or before moonrise
+                row['time'] <= moonrise_hour or  ##also after moonset or before moonrise
+                moonphase <= MOON_THRESHOLD)):
                 count += 1
             else:
                 count = 0
@@ -679,14 +681,13 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    # Start the scheduler thread
+    # # Start the scheduler thread
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.daemon = True
     scheduler_thread.start()
 
-    # Start the background thread for scheduled shutdown
+    # # Start the background thread for scheduled shutdown
     shutdown_thread = threading.Thread(target=scheduled_shutdown)
     shutdown_thread.daemon = True
     shutdown_thread.start()
-
     app.run(debug=True)
