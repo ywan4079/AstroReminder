@@ -154,6 +154,11 @@ def weather_condition_decider(row):
 
     return suitable_locations
 
+def check_and_send_email():
+    now = datetime.datetime.now(australia_tz)
+    if now.hour == 7 and now.minute == 50:
+        send_email()
+
 def send_email():
     conn = sqlite3.connect(os.path.join(base_dir, 'users.db'))
     c = conn.cursor()
@@ -266,7 +271,7 @@ def shutdown_server():
     os.kill(os.getpid(), signal.SIGINT)
 
 # Schedule the send_email function to run every day at 12 PM
-schedule.every().day.at("07:22").do(send_email)
+schedule.every().minute.do(check_and_send_email)
 
 # Scheduler function to run in a separate thread
 def run_scheduler():
