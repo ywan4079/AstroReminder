@@ -157,7 +157,7 @@ def weather_condition_decider(row):
 
 def check_and_send_email():
     now = datetime.datetime.now(australia_tz)
-    if now.hour == 5 and now.minute == 50:
+    if now.hour == 12 and now.minute == 0:
         send_email()
 
 def send_email():
@@ -180,7 +180,7 @@ def send_email():
         for row in data:
             to_email = row[1]
             suitable_locations = weather_condition_decider(row)
-            if len(suitable_locations) == 0 and int(row[0]) != 1:
+            if len(suitable_locations) == 0:
                 continue
             subject = "Astro Reminder"
             body = f"According to the forecast, you can see a clear sky in {', '.join(suitable_locations)} tonight. It's suitable for stargazing. Wish you have a wonderful stargazing trip!"

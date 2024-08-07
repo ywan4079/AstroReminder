@@ -4,7 +4,7 @@
 
 {% block content %}
     <header>
-        <h1>Scheduled Shutdowm</h1>
+        <h1>Scheduled Shutdown</h1>
         <nav>
             <a href="{{url_for('admin', id=id)}}">Go back</a>
         </nav>
@@ -17,7 +17,7 @@
         </section>
         Next shutdown datetime: {{shutdown_datetime}}<br>
         Now: {{now}}<br>
-        This function doesn't work right. Still testing.
+        This function doesn't work right now. Still testing.
         <form action="{{url_for('shutdown',id=id)}}" method="post">
             <input type="datetime-local" id="datetime" name="datetime" required>
             <!-- <textarea id="content" name="content" placeholder="Type accouncement here..." rows="10" style="width: 90%;" required></textarea> -->
