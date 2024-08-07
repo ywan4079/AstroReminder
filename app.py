@@ -291,6 +291,16 @@ def scheduled_shutdown():
                 break
         time.sleep(30)  # Check every 30 seconds
 
+# Start the scheduler thread
+scheduler_thread = threading.Thread(target=run_scheduler)
+scheduler_thread.daemon = True
+scheduler_thread.start()
+
+# Start the background thread for scheduled shutdown
+shutdown_thread = threading.Thread(target=scheduled_shutdown)
+shutdown_thread.daemon = True
+shutdown_thread.start()
+
 
 @app.route('/')
 def index():
@@ -687,24 +697,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-print("TEST1")
 
 if __name__ == '__main__':
-
-    print("TEST2")
-
-    # # Start the scheduler thread
-    scheduler_thread = threading.Thread(target=run_scheduler)
-    scheduler_thread.daemon = True
-    scheduler_thread.start()
-
-    # # Start the background thread for scheduled shutdown
-    shutdown_thread = threading.Thread(target=scheduled_shutdown)
-    shutdown_thread.daemon = True
-    shutdown_thread.start()
-
-    print("TEST3")
-
     app.run(debug=True)
-
-    print("TEST4")
