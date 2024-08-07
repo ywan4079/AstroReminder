@@ -16,7 +16,8 @@
             </p>
         </section>
         Next shutdown datetime: {{shutdown_datetime}}<br>
-        Now: {{now}}
+        Now: {{now}}<br>
+        This function doesn't work right. Still testing.
         <form action="{{url_for('shutdown',id=id)}}" method="post">
             <input type="datetime-local" id="datetime" name="datetime" required>
             <!-- <textarea id="content" name="content" placeholder="Type accouncement here..." rows="10" style="width: 90%;" required></textarea> -->

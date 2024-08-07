@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 
 import csv, sqlite3, hashlib, smtplib, schedule, time, threading, requests, datetime, os, signal, pytz, logging
 
+# global variables
 FROM_EMAIL = 'astroreminderassistant@gmail.com'
 EMAIL_PASSWORD = 'bumq fcfv zftb vazz'
 
@@ -156,8 +157,7 @@ def weather_condition_decider(row):
 
 def check_and_send_email():
     now = datetime.datetime.now(australia_tz)
-    print(f"CHECKING TIME: {now.hour}:{now.minute}", flush=True)
-    if now.hour == 5 and now.minute == 38:
+    if now.hour == 5 and now.minute == 50:
         send_email()
 
 def send_email():
@@ -180,7 +180,7 @@ def send_email():
         for row in data:
             to_email = row[1]
             suitable_locations = weather_condition_decider(row)
-            if len(suitable_locations) == 0:
+            if len(suitable_locations) == 0 and int(row[0]) != 1:
                 continue
             subject = "Astro Reminder"
             body = f"According to the forecast, you can see a clear sky in {', '.join(suitable_locations)} tonight. It's suitable for stargazing. Wish you have a wonderful stargazing trip!"
@@ -678,7 +678,6 @@ def shutdown(id):
     if request.method == 'POST':
         shutdown_datetime_str = request.form.get('datetime')
         shutdown_time = australia_tz.localize(datetime.datetime.strptime(shutdown_datetime_str, "%Y-%m-%dT%H:%M"))
-        # shutdown_time = datetime.datetime.strptime(shutdown_datetime_str, '%Y-%m-%dT%H:%M')
         if shutdown_time <= datetime.datetime.now(australia_tz):
             shutdown_time = None
             flash('You can\'t shutdown the server before now.', 'error')
