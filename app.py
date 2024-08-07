@@ -157,7 +157,7 @@ def weather_condition_decider(row):
 def check_and_send_email():
     now = datetime.datetime.now(australia_tz)
     print(f"CHECKING TIME: {now.hour}:{now.minute}", flush=True)
-    if now.hour == 12 and now.minute == 0:
+    if now.hour == 5 and now.minute == 38:
         send_email()
 
 def send_email():
