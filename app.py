@@ -29,8 +29,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-logging.basicConfig(level=logging.INFO)
-
 # Read city database
 cities = dict()
 with open(os.path.join(base_dir, 'AU_500.csv'), 'r') as f:
@@ -278,15 +276,9 @@ schedule.every().minute.do(check_and_send_email)
 
 # Scheduler function to run in a separate thread
 def run_scheduler():
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)  # Sleep for 1 second
     while True:
-        try:
-            schedule.run_pending()
-            time.sleep(1)  # Sleep for 1 second
-        except Exception as e:
-            logging.error(f"Scheduler encountered an error: {e}")
+        schedule.run_pending()
+        time.sleep(1)  # Sleep for 1 second
 
 def scheduled_shutdown():
     global shutdown_time
@@ -695,7 +687,12 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+print("TEST1")
+
 if __name__ == '__main__':
+
+    print("TEST2")
+
     # # Start the scheduler thread
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.daemon = True
@@ -705,6 +702,9 @@ if __name__ == '__main__':
     shutdown_thread = threading.Thread(target=scheduled_shutdown)
     shutdown_thread.daemon = True
     shutdown_thread.start()
-    logging.error("testing")
+
+    print("TEST3")
 
     app.run(debug=True)
+
+    print("TEST4")
