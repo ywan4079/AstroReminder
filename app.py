@@ -3,12 +3,14 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
+from apscheduler.schedulers.background import BackgroundScheduler
 
 # ensure schedule can be loaded
 # import sys
 # sys.path.append('./.local/lib/python3.10/site-packages')
 
-import csv, sqlite3, hashlib, smtplib, schedule, time, threading, requests, datetime, os, signal, pytz, logging
+import csv, sqlite3, hashlib, smtplib, time, threading, requests, datetime, os, signal, pytz, atexit
+# import schedule
 
 # global variables
 FROM_EMAIL = 'astroreminderassistant@gmail.com'
@@ -111,7 +113,7 @@ def weather_condition_decider(row):
         rows = table.find("tr", attrs={"class":"hour-row"}).find_next_siblings()
         rows = [row for row in rows if row.has_attr('class') and row['class'][0] == "hour-row"]
 
-        # filter the hour >= 12 because we send the email at 12pm everyday. we don't consider the data in the past
+        # filter the hour >= 12 because we send the email at 12pm everyday. we don't consider the data before that
         first_day_night = [row for row in rows if row['class'][1] == "night" and row['data-day'] == "0" and int(row['data-hour']) >= 12]
         second_day_night = [row for row in rows if row['class'][1] == "night" and row['data-day'] == "1" and int(row['data-hour']) < 12]
 
@@ -161,6 +163,7 @@ def check_and_send_email():
         send_email()
 
 def send_email():
+    print("send email")
     conn = sqlite3.connect(os.path.join(base_dir, 'users.db'))
     c = conn.cursor()
     c.execute('''
@@ -179,6 +182,7 @@ def send_email():
 
         for row in data:
             to_email = row[1]
+
             suitable_locations = weather_condition_decider(row)
             if len(suitable_locations) == 0:
                 continue
@@ -271,14 +275,11 @@ def shutdown_server():
     time.sleep(5)  # Give some time for ongoing requests to finish
     os.kill(os.getpid(), signal.SIGINT)
 
-# Schedule the send_email function to run every day at 12 PM
-schedule.every().minute.do(check_and_send_email)
-
 # Scheduler function to run in a separate thread
-def run_scheduler():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)  # Sleep for 1 second
+# def run_scheduler():
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(1)  # Sleep for 1 second
 
 def scheduled_shutdown():
     global shutdown_time
@@ -291,15 +292,24 @@ def scheduled_shutdown():
                 break
         time.sleep(30)  # Check every 30 seconds
 
-# Start the scheduler thread
-scheduler_thread = threading.Thread(target=run_scheduler)
-scheduler_thread.daemon = True
-scheduler_thread.start()
+# # Start the scheduler thread
+# # Schedule the send_email function to run every day at 12 PM
+# schedule.every().minute.do(check_and_send_email)
 
-# Start the background thread for scheduled shutdown
-shutdown_thread = threading.Thread(target=scheduled_shutdown)
-shutdown_thread.daemon = True
-shutdown_thread.start()
+# scheduler_thread = threading.Thread(target=run_scheduler)
+# scheduler_thread.daemon = True
+# scheduler_thread.start()
+
+# # Start the background thread for scheduled shutdown
+# shutdown_thread = threading.Thread(target=scheduled_shutdown)
+# shutdown_thread.daemon = True
+# shutdown_thread.start()
+
+# v2 scheduler thread
+scheduler = BackgroundScheduler()
+scheduler.add_job(send_email, 'cron', hour=6, minute=26, timezone=australia_tz)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
 
 
 @app.route('/')
@@ -496,7 +506,6 @@ def update_email(id):
         conn.commit()
         conn.close()
 
-        user = load_user(id)
         flash('Successfully update your email.', 'success')
         return redirect(url_for('home', id=id))
 
@@ -698,4 +707,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
